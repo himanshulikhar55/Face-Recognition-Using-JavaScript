@@ -11,7 +11,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 	<title>Registration Portal</title>
 </head>
 <body>
@@ -47,5 +47,5 @@
 		<div id="video-div"></div>
 	</div>
 </body>
-<script type="text/javascript" src="functions.js"></script>
+<script type="text/javascript" src="js/functions.js"></script>
 </html>
