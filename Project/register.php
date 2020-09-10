@@ -54,12 +54,12 @@
 				    <video id="video">Video stream not available.</video>
 				    <div class="row">
 				    	<button id="start" onclick="takepicture();">Take photo</button>
-				    	<button id="endbutton" onclick="clearphoto();">Clear</button>
 				    </div>
 				</div>
 				<canvas id="canvas"></canvas>
 				<div class="output">
 					<img id="photo" alt="The screen capture will appear in this box.">
+					<button id="endbutton" onclick="clearphoto();">Clear</button>
 				</div>
 		</div>
 	</div>
