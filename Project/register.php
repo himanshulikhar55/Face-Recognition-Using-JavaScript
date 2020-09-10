@@ -1,6 +1,16 @@
 <?php
-	if(isset($_POST['cancel']))
-		header('Location: index.php')
+	session_start();
+	include_once "pdo.php";
+	if(isset($_POST['email'])){
+		$sql = $pdo->prepare("INSERT INTO user_data(username, email, pass) VALUES(:username, :email, :pass)");
+		$sql->execute(array(':username' => $_POST['username'], ':email' => $_POST['email'], ':pass' => $_POST['pass']));
+		header('Location: index.php');
+		return;
+	}
+	if(isset($_POST['cancel'])){
+		header('Location: index.php');
+		return;
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,10 +21,10 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
 	<title>Registration Portal</title>
 </head>
-<body>
+<body onload="startup(); clearphoto();">
 	<header class="jumbotron">
 			<img src="img/logo.png">
 	</header>
@@ -40,12 +50,20 @@
 			</p>
 		</div>
 		<div class="row">
-			<p>
-				<label>Click here to register: </label>&nbsp;<button id="scan" onclick="startup();">Register Facial ID</button>
-			</p>
+				<div class="camera">
+				    <video id="video">Video stream not available.</video>
+				    <div class="row">
+				    	<button id="start" onclick="takepicture();">Take photo</button>
+				    	<button id="endbutton" onclick="clearphoto();">Clear</button>
+				    </div>
+				</div>
+				<canvas id="canvas"></canvas>
+				<div class="output">
+					<img id="photo" alt="The screen capture will appear in this box.">
+				</div>
 		</div>
-		<div id="video-div"></div>
 	</div>
 </body>
-<script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="js/functions.js">
+</script>
 </html>

@@ -1,29 +1,18 @@
 var width = 320; // We will scale the photo width to this
 var height = 0; // This will be computed based on the input stream
-
+    
 var streaming = false;
 
 var video = null;
 var canvas = null;
 var endbutton = null;
-var startbutton = null;
+var start = null;
 
 function startup() {
-	document.getElementById('video-div').innerHTML = '\
-        <div class="camera">\
-            <video id="video">Video stream not available.</video>\
-        </div>\
-        <div><button id="startbutton">Take photo</button> &nbsp;\
-        <button id="endbutton" onclick="clearphoto();">Take Again</button></div>\
-        <canvas id="canvas"></canvas>\
-        <div class="output">\
-        </div>\
-    </div>\
-        ';
     video = document.getElementById('video');
     canvas = document.getElementById('canvas');
     endbutton = document.getElementById('endbutton');
-    startbutton = document.getElementById('startbutton');
+    start = document.getElementById('start');
     navigator.mediaDevices.getUserMedia({
             video: true,
             audio: false
@@ -51,12 +40,6 @@ function startup() {
             streaming = true;
         }
     }, false);
-
-    startbutton.addEventListener('click', function(ev) {
-        takepicture();
-        ev.preventDefault();
-    }, false);
-    clearphoto();
 }
 
 
@@ -64,6 +47,8 @@ function clearphoto(){
     var context = canvas.getContext('2d');
     context.fillStyle = "#AAA";
     context.fillRect(0, 0, canvas.width, canvas.height);
+    var data = canvas.toDataURL('image/png');
+    photo.setAttribute('src', data);
 }
 
 function takepicture() {
@@ -73,6 +58,10 @@ function takepicture() {
         canvas.width = width;
         canvas.height = height;
         context.drawImage(video, 0, 0, width, height);
+        var data = canvas.toDataURL('image/png');
+        photo.setAttribute('src', data);
+    } else {
+      clearphoto();
     }
 }
 
