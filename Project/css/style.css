@@ -6,6 +6,10 @@
     height:auto;
     display:inline-block;
 }
+.row{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 #video {
     border: 1px solid black;
     width: 320px;

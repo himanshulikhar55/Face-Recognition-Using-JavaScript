@@ -13,11 +13,13 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/functions.js"></script>
+    <script src="js/face-api.js"></script>
 	<title>
 		Credential Registration Page
 	</title>
 </head>
-<body>
+<body onload="runFacialRecognition();">
 	<header class="jumbotron">
 			<img src="img/logo.png">
 	</header>
@@ -31,14 +33,23 @@
 					<p>
 						<label>Password:&nbsp;</label><input type="password" name="pass" id="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  title="Note: Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" />
 					</p>
+					<div class="row">
+					<label>Please look at the camera:&nbsp;</label>
+					
+					<div class="camera">
+					    <video id="video" onload="startup();">Video stream not available.</video>
+					</div>
+					<canvas id="canvas"></canvas>
+					<img id="photo" alt="The screen capture will appear in this box." style="display: none;">
+					</div>
 					<p>
 						<input type="submit" name="login" value="Login" />
 						&nbsp;
 						<input type="submit" name="cancel" value="Cancel" />
 					</p>
+					</div>
 				</form>
 			</p>
-		</div>
 	</div>
 </body>
 </html>
