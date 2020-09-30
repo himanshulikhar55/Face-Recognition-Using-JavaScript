@@ -91,28 +91,9 @@ function redirectPage(){
 function cancel(){
     window.location = "index.php";
 }
-function customCapture(){
-    while(document.getElementById('user').value == " " || document.getElementById('user').value == null){
-        continue;
-    }
-    username = document.getElementById('user').value;
-    video = document.getElementById('video');
-    canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    clearphoto();
-    if (width && height) {
-        canvas.width = width;
-        canvas.height = height;
-        context.drawImage(video, 0, 0, width, height);
-        var data = canvas.toDataURL('image/png');
-    } else {
-      clearphoto();
-    }
-    return data;
-}
 function runFacialRecognition(){
     startup();
-    data = customCapture();
+    customCapture();
     var image = localStorage.getItem('himanshulikhar55');
     const MODEL_URL = '/cdit/img';
     faceapi.loadSsdMobilenetv1Model(MODEL_URL);
@@ -132,4 +113,26 @@ function runFacialRecognition(){
     // fullFaceDescriptions = faceapi.resizeResults(fullFaceDescriptions, image1);
     // faceapi.draw.drawDetections(image2, fullFaceDescriptions);
     // faceapi.draw.drawFaceLandmarks(image2, fullFaceDescriptions);
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function customCapture(){
+    while(document.getElementById('user').value == " " || document.getElementById('user').value == null){
+        await sleep(300);
+    }
+    username = document.getElementById('user').value;
+    video = document.getElementById('video');
+    canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    clearphoto();
+    if (width && height) {
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(video, 0, 0, width, height);
+        var data = canvas.toDataURL('image/png');
+    } else {
+      clearphoto();
+    }
+    return data;
 }

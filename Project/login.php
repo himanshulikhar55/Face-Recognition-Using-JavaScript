@@ -13,13 +13,17 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/functions.js"></script>
-    <script src="js/face-api.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    <!-- <script src="js/face-api.js"></script> -->
 	<title>
 		Credential Registration Page
 	</title>
 </head>
-<body onload="runFacialRecognition();">
+<body>
 	<header class="jumbotron">
 			<img src="img/logo.png">
 	</header>
@@ -53,3 +57,72 @@
 	</div>
 </body>
 </html>
+<script type="text/javascript">
+	var width = 320; // We will scale the photo width to this
+	var height = 0; // This will be computed based on the input stream
+	    
+	var streaming = false;
+
+	var video = null;
+	var canvas = null;
+	var endbutton = null;
+	var start = null;
+	var photo = null;
+
+	$(document).ready(
+		function startup() {
+	    video = document.getElementById('video');
+	    canvas = document.getElementById('canvas');
+	    endbutton = document.getElementById('endbutton');
+	    start = document.getElementById('start');
+	    photo = document.getElementById('photo');
+	    navigator.mediaDevices.getUserMedia({
+	            video: true,
+	            audio: false
+	        })
+	        .then(function(stream) {
+	            video.srcObject = stream;
+	            video.play();
+	        })
+	        .catch(function(err) {
+	            console.log("An error occurred: " + err);
+	    });
+
+	    video.addEventListener('canplay', function(ev) {
+	        if (!streaming) {
+	            height = video.videoHeight / (video.videoWidth / width);
+
+	            if (isNaN(height)) {
+	                height = width / (4 / 3);
+	            }
+
+	            video.setAttribute('width', width);
+	            video.setAttribute('height', height);
+	            canvas.setAttribute('width', width);
+	            canvas.setAttribute('height', height);
+	            streaming = true;
+	        }
+	    }, false);
+	});
+	// $(document).ready(
+	// function takepicture(){
+	//     var context = canvas.getContext('2d');
+	//     clearphoto();
+	//     if (width && height) {
+	//         canvas.width = width;
+	//         canvas.height = height;
+	//         context.drawImage(video, 0, 0, width, height);
+	//         var data = canvas.toDataURL('image/png');
+	//         photo.setAttribute('src', data);
+	//     } else {
+	//       clearphoto();
+	//     }
+	// });
+	function clearphoto(){
+	    var context = canvas.getContext('2d');
+	    context.fillStyle = "#AAA";
+	    context.fillRect(0, 0, canvas.width, canvas.height);
+	    // var data = canvas.toDataURL('image/png');
+	    photo.setAttribute('src', "");
+	}
+</script>

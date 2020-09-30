@@ -65,5 +65,4 @@
 	</div>
 </body>
 <script type="text/javascript" src="js/functions.js"></script>
-<script src="face-api.js"></script>
 </html>
