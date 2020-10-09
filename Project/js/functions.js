@@ -87,52 +87,13 @@ function redirectPage(){
     var canvas = document.getElementById("canvas");
     var data = canvas.toDataURL("image/jpeg");
     localStorage.setItem(username,data);
+    var link = document.createElement('a');
+    link.href = data;
+    link.download = username + '.jpeg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 function cancel(){
     window.location = "index.php";
-}
-function runFacialRecognition(){
-    startup();
-    customCapture();
-    var image = localStorage.getItem('himanshulikhar55');
-    const MODEL_URL = '/cdit/img';
-    faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-    faceapi.loadFaceLandmarkModel(MODEL_URL);
-    faceapi.loadFaceRecognitionModel(MODEL_URL);
-
-    var image1 = new Image();
-    image1.src = localStorage.getItem('himanshulikhar55');
-    document.body.appendChild(image1);
-
-    var image2 = new Image();
-    image2.src = data;
-    document.body.appendChild(image2);
-
-    // var fullFaceDescriptions = faceapi.detectAllFaces(image2);
-    // faceapi.matchDimensions(image2, image1);
-    // fullFaceDescriptions = faceapi.resizeResults(fullFaceDescriptions, image1);
-    // faceapi.draw.drawDetections(image2, fullFaceDescriptions);
-    // faceapi.draw.drawFaceLandmarks(image2, fullFaceDescriptions);
-}
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-async function customCapture(){
-    while(document.getElementById('user').value == " " || document.getElementById('user').value == null){
-        await sleep(300);
-    }
-    username = document.getElementById('user').value;
-    video = document.getElementById('video');
-    canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    clearphoto();
-    if (width && height) {
-        canvas.width = width;
-        canvas.height = height;
-        context.drawImage(video, 0, 0, width, height);
-        var data = canvas.toDataURL('image/png');
-    } else {
-      clearphoto();
-    }
-    return data;
 }

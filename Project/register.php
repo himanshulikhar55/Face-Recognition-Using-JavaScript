@@ -21,7 +21,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 	<title>Registration Portal</title>
 </head>
 <body onload="startup(); clearphoto();">
