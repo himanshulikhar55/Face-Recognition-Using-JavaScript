@@ -115,38 +115,38 @@
                                 const img = await faceapi.fetchImage(imgUrl)
                                 
                                 // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-                                // const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
+                                const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
                                 
-                                // if (!fullFaceDescription) {
-                                // throw new Error(`no faces detected for ${label}`)
-                                // }
+                                if (!fullFaceDescription) {
+                                throw new Error(`no faces detected for ${label}`)
+                                }
                                 
-                                // const faceDescriptors = [fullFaceDescription.descriptor]
-                                // return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
+                                const faceDescriptors = [fullFaceDescription.descriptor]
+                                return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
                             })
                         );
 
-                    //     const maxDescriptorDistance = 0.6
-                    //     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+                        const maxDescriptorDistance = 0.6
+                        const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
 
-                    //     const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+                        const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 
-                    //     results.forEach((bestMatch, i) => {
-                    //         // const box = fullFaceDescriptions[i].detection.box
-                    //         const text = bestMatch.toString()
-                    //         var start = text.lastIndexOf("(");
-                    //         var end = text.lastIndexOf(")");
-                    //         if(start!=-1){
-                    //             var num = text.substring(
-                    //             start + 1, end);
-                    //             var val = parseFloat(num);
-                    //             if(val >0.6){
-                    //                 alert("No match found!!");
-                    //             }
-                    //         }
-                    //         // const drawBox = new faceapi.draw.DrawBox(box, { label: text })
-                    //         // drawBox.draw(canvas)
-                    //     })
+                        results.forEach((bestMatch, i) => {
+                            const box = fullFaceDescriptions[i].detection.box
+                            const text = bestMatch.toString()
+                            var start = text.lastIndexOf("(");
+                            var end = text.lastIndexOf(")");
+                            if(start!=-1){
+                                var num = text.substring(
+                                start + 1, end);
+                                var val = parseFloat(num);
+                                if(val >0.6){
+                                    alert("No match found!!");
+                                }
+                            }
+                            // const drawBox = new faceapi.draw.DrawBox(box, { label: text })
+                            // drawBox.draw(canvas)
+                        })
 
                     },2000);
 
