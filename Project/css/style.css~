@@ -23,6 +23,10 @@
     height: 240px;
 }
 
+#canvas {
+    display: none;
+}
+
 .camera {
     width: 340px;
 }

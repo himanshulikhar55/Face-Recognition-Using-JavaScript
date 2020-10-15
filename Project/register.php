@@ -6,8 +6,10 @@
 		return;
 	}
 	if(isset($_POST['email'])){
-		$sql = $pdo->prepare("INSERT INTO user_data(username, email, pass) VALUES(:username, :email, :pass)");
-		$sql->execute(array(':username' => $_POST['username'], ':email' => $_POST['email'], ':pass' => $_POST['pass']));
+		$_SESSION['succ'] = true;
+		$path = $_POST['username'].'.jpeg';
+		$sql = $pdo->prepare('INSERT INTO `user_data` (`username`, `email`, `pass`, `path`) VALUES (:username, :email, :pass, :file_path)');
+		$sql->execute(array(':username' => $_POST['username'], ':email' => $_POST['email'], ':pass' => $_POST['pass'], ':file_path' => $path));
 		header('Location: index.php');
 		return;
 	}
@@ -56,7 +58,7 @@
 			    	<button id="start" onclick="takepicture();">Take photo</button>
 			    </div>
 			</div>
-			<canvas id="canvas"></canvas>
+			<canvas id="canvas" style="display: none;"></canvas>
 			<div class="output">
 				<img id="photo" alt="The screen capture will appear in this box.">
 				<button id="endbutton" onclick="clearphoto();">Clear</button>

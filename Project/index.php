@@ -1,3 +1,6 @@
+<?php
+	session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +26,17 @@
 					Welcome to C-DIT's portal!
 				</h3>
 			</div>
-		</div>
+		<div>
+			<?php
+				if(isset($_SESSION['succ'])){
+					echo "<p style='color: green;'>You have successfully registered!</p>";
+					unset($_SESSION['succ']);
+				}
+				if(isset($_SESSION['log'])){
+					echo "<p style='color: green;'>You have successfully Logged In!</p>";
+					unset($_SESSION['log']);
+				}
+			?>
 		<div class="row">
 			<div class="col-12">
 				<p>
@@ -36,5 +49,4 @@
 		</div>
 	</div>
 </body>
-<script type="text/javascript" src="js/functions.js"></script>
 </html>
