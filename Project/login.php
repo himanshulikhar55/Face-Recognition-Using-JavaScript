@@ -45,6 +45,7 @@
             <form method="POST">
                 <p>
                     <label>Username:&nbsp;</label><input type="text" name="username" id="user" placeholder="Your username here" />
+                    <span id="username" style="display: none;"></span>
                 </p>
                 <p>
                     <label>Password:&nbsp;</label><input type="password" name="pass" id="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  title="Note: Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" />
@@ -106,10 +107,24 @@
                         const fullFaceDescription = faceapi.resizeResults(fullFaceDescriptions, displaySize)
                         faceapi.draw.drawDetections(canvas, fullFaceDescriptions)
 
-                        const labels = ["img/himanshu"]
+                        const labels = [""];
+
+                        (
+                            function (){
+                            var textInput = document.getElementById('user');
+                            var el = document.getElementById('username');
+                            var timeout = null;
+
+                            textInput.addEventListener('keyup', function (e) {
+                            clearTimeout(timeout);
+                            timeout = setTimeout(function (){
+                                labels[0] = "/img/" + textInput.value;}, 800);
+                            });
+                        })();
 
                         const labeledFaceDescriptors = await Promise.all(
                             labels.map(async label => {
+
                                 // fetch image data from urls and convert blob to HTMLImage element
                                 const imgUrl = `${label}.jpeg`
                                 const img = await faceapi.fetchImage(imgUrl)
