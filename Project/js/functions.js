@@ -84,17 +84,6 @@ function redirectPage(){
         alert("Please register Facial ID");
         return false;
     }
-    var canvas = document.getElementById("canvas");
-    var data = canvas.toDataURL("image/jpeg");
-    localStorage.setItem(username,data);
-    var link = document.createElement('a');
-    var base_url = window.location.origin;
-    link.href = data;
-    // alert(link.href);
-    link.download = username + '.jpeg';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 }
 function cancel(){
     window.location = "index.php";
