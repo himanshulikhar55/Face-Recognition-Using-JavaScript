@@ -1,9 +1,9 @@
 <?php
-	session_start();
+    session_start();
     include_once "pdo.php";
 
-	if(isset($_POST['cancel']))
-		header('Location: index.php');
+    if(isset($_POST['cancel']))
+        header('Location: index.php');
     if(isset($_POST['login'])){
         $path = $_POST['username'].'.jpeg';
         $sql = $pdo->prepare('SELECT * FROM `user_data` WHERE (:username, :pass)');
@@ -17,10 +17,17 @@
         header('Location: login.php');
         return;
     }
+    $sql = $pdo->prepare('SELECT username FROM `user_data`');
+    $rows = $sql->execute(array(':username' => $_POST['username'], ':email' => $_POST['email'], ':pass' => $_POST['pass'], ':file_path' => $path));
+    if($rows){
+        $_SESSION['succ'] = true;
+        header('Location: index.php');
+        return;
+    }
 ?>
 <!DOCTYPE html>
 <html>
-	<head>
+    <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -45,6 +52,7 @@
             <form method="POST">
                 <p>
                     <label>Username:&nbsp;</label><input type="text" name="username" id="user" placeholder="Your username here" />
+                    <span id="username" style="display: none;"></span>
                 </p>
                 <p>
                     <label>Password:&nbsp;</label><input type="password" name="pass" id="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  title="Note: Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" />
@@ -67,6 +75,10 @@
     <script src="js/jquery-2.1.1.min.js"></script>
     <script src="js/face-api.js"></script>
     <script>
+        function getLabel(){
+            var toRet = "./img/" + document.getElementById('user').value;
+            return toRet;
+        }
         $(document).ready(function(){
 
             let video = document.querySelector("#videoElement");
@@ -105,9 +117,8 @@
 
                         const fullFaceDescription = faceapi.resizeResults(fullFaceDescriptions, displaySize)
                         faceapi.draw.drawDetections(canvas, fullFaceDescriptions)
-
-                        const labels = ["img/himanshu"]
-
+                        const labels = [""];
+                        labels[0] = getLabel();
                         const labeledFaceDescriptors = await Promise.all(
                             labels.map(async label => {
                                 // fetch image data from urls and convert blob to HTMLImage element
@@ -118,21 +129,21 @@
                                 const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
                                 
                                 if (!fullFaceDescription) {
-                                throw new Error(`no faces detected for ${label}`)
+                                    alert("No face detected in your registered image!")
                                 }
                                 
                                 const faceDescriptors = [fullFaceDescription.descriptor]
                                 return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
                             })
                         );
-
                         const maxDescriptorDistance = 0.6
                         const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
 
                         const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
-
+                        if(results == "")
+                            alert("No face found!");
                         results.forEach((bestMatch, i) => {
-                            const box = fullFaceDescriptions[i].detection.box
+                            // const box = fullFaceDescriptions[i].detection.box
                             const text = bestMatch.toString()
                             var start = text.lastIndexOf("(");
                             var end = text.lastIndexOf(")");
@@ -140,7 +151,7 @@
                                 var num = text.substring(
                                 start + 1, end);
                                 var val = parseFloat(num);
-                                if(val >0.6){
+                                if(val > 0.6){
                                     alert("No match found!!");
                                 }
                             }
@@ -154,9 +165,9 @@
                 }
                 detect()
                 // console.log(this.scrollHeight);
-            });   
+            });
 
-      	})
+        })
             
         </script>
     </body>
