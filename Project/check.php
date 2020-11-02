@@ -1,7 +1,6 @@
 <?php
 	include_once "pdo.php";
 	$taken = false;
-	$_POST['username'] = 'himanshulikhar55';
 	if ( !isset($_POST['username']) ){
 		echo '0';
 	}
