@@ -4,12 +4,12 @@
 
 	if(isset($_POST['cancel']))
 		header('Location: index.php');
-    if(isset($_POST['login'])){
-        $path = $_POST['username'].'.jpeg';
-        $sql = $pdo->prepare('SELECT * FROM `user_data` WHERE (:username, :pass)');
-        $rows = $sql->execute(array(':username' => $_POST['username'], ':email' => $_POST['email'], ':pass' => $_POST['pass'], ':file_path' => $path));
+    if(isset($_POST['username'])){
+        $sql = $pdo->prepare('SELECT `username` FROM `user_data` WHERE (username = :username)');
+        $rows = $sql->execute(array(':username' => $_POST['username']));
         if($rows){
-            $_SESSION['succ'] = true;
+            $_SESSION['login'] = true;
+            $_SESSION['username'] = $_POST['username'];
             header('Location: index.php');
             return;
         }
@@ -36,31 +36,22 @@
     </header>
     <div class="container">
         <div class="row">
-            <?php
-                if(isset($_SESSION['error'])){
-                    unset($_SESSION['error']);
-                    echo "<p style='color: red;'>Invalid Username or Password</p>";
-                }
-            ?>
-            <form method="POST">
+        	<?php
+        		if(isset($_SESSION['error'])){
+        			echo "<p style='color: red>Cannot find a user that matches you!</p>'";
+        		}
+        	?>
+            <p>
+                <label>Facial ID:</label>
+            </p>
+            <p>
+                <video autoplay="true" id="videoElement"></video>
+                <canvas id="canvas" style="position: absolute; left: 75px; top: 400px;"></canvas>
+            </p>
+            <form method="POST" id="form">
                 <p>
-                    <label>Username:&nbsp;</label><input type="text" name="username" id="user" placeholder="Your username here" />
-                    <span id="username" style="display: none;"></span>
-                </p>
-                <p>
-                    <label>Password:&nbsp;</label><input type="password" name="pass" id="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  title="Note: Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" />
-                </p>
-                <p>
-                    <label>Facial ID:</label>
-                </p>
-                <p>
-                    <video autoplay="true" id="videoElement"></video>
-                    <canvas id="canvas" style="position: absolute; left: 75px; top: 400px;"></canvas>
-                </p>
-                <p>
-                    <input type="submit" value="Login" name="login" onclick="return redirectPage();" />
-                    &nbsp; &nbsp;
-                    <input type="submit" name="cancel" value="Cancel" onclick="return cancel();" />
+                	<input name="username" id="username" type="hidden" value="" style="display: none;">
+                	<input type="submit" name="submitForm" value="" style="display: none;">
                 </p>
             </form>
         </div>
@@ -68,6 +59,15 @@
     <script src="js/jquery-2.1.1.min.js"></script>
     <script src="js/face-api.js"></script>
     <script>
+    	const labels = [""];
+
+        $.post( "fetch.php", function(data){
+			for (var i = 0, len = data.length; i < len; i++) {
+		        labels[i] = data[i];
+		        // console.log(labels[i]);
+		    }
+		});
+
         $(document).ready(function(){
 
             let video = document.querySelector("#videoElement");
@@ -107,26 +107,11 @@
                         const fullFaceDescription = faceapi.resizeResults(fullFaceDescriptions, displaySize)
                         faceapi.draw.drawDetections(canvas, fullFaceDescriptions)
 
-                        const labels = [""];
-
-                        (
-                            function (){
-                            var textInput = document.getElementById('user');
-                            var el = document.getElementById('username');
-                            var timeout = null;
-
-                            textInput.addEventListener('keyup', function (e) {
-                            clearTimeout(timeout);
-                            timeout = setTimeout(function (){
-                                labels[0] = "/img/" + textInput.value;}, 800);
-                            });
-                        })();
-
                         const labeledFaceDescriptors = await Promise.all(
                             labels.map(async label => {
 
                                 // fetch image data from urls and convert blob to HTMLImage element
-                                const imgUrl = `${label}.jpeg`
+                                const imgUrl = `./img/${label}.jpeg`
                                 const img = await faceapi.fetchImage(imgUrl)
                                 
                                 // detect the face with the highest score in the image and compute it's landmarks and face descriptor
@@ -159,8 +144,18 @@
                                     alert("No match found!!");
                                 }
                             }
-                            // const drawBox = new faceapi.draw.DrawBox(box, { label: text })
-                            // drawBox.draw(canvas)
+                            const drawBox = new faceapi.draw.DrawBox(box, { label: text })
+                            drawBox.draw(canvas)
+                            var user = "";
+                            for(var i=0;i<text.length;i++){
+								if(text[i]!=' ')
+                            		user += text[i];
+                            	else
+                            		break;
+                            }
+                            $('#username').val(user);
+                            alert(user);
+                            $('#form').submit();
                         })
 
                     },2000);

@@ -96,7 +96,6 @@
     var txt = form.find('input[name="username"]').val();
     window.console && console.log('Checking Username...');
     $.post( "check.php", { username: $("#user").val() }, function(data){
-    	// alert(data);
 		if(data=='1'){
 			$('#spinner').hide();
 			$('#available').show();
