@@ -39,27 +39,27 @@
 				}
 				if(isset($_SESSION['register'])){
 					echo "<p style='color: green;'>You have successfully registered!</p>";
-					unset($_SESSION['succ']);
+					unset($_SESSION['register']);
 				}
 				if(isset($_SESSION['login'])){
 					echo "<p style='color: green;'>Welcome, " . $_SESSION['username'] . "!</p>";
 					unset($_SESSION['login']);
 				}
 			?>
-		<?php
-			if(!isset($_SESSION['username'])){
-				echo '<div class="row">
-			<div class="col-12">
-				<p>
-					If you have already registered, <a href="login.php">Login here</a>.
-				</p>
-				<p>
-					Else, <a href="register.php">Register here</a>.
-				</p>
-			</div>
-		</div>';
-			}
-		?>
+			<?php
+				if(!isset($_SESSION['username'])){
+					echo '<div class="row">
+				<div class="col-12">
+					<p>
+						If you have already registered, <a href="login.php">Login here</a>.
+					</p>
+					<p>
+						Else, <a href="register.php">Register here</a>.
+					</p>
+				</div>
+			</div>';
+				}
+			?>
 	</div>
 </body>
 </html>

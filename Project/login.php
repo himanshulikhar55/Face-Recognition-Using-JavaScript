@@ -109,6 +109,7 @@
 
                         const labeledFaceDescriptors = await Promise.all(
                             labels.map(async label => {
+                                console.log(label);
 
                                 // fetch image data from urls and convert blob to HTMLImage element
                                 const imgUrl = `./img/${label}.jpeg`
@@ -132,6 +133,7 @@
                         const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 
                         results.forEach((bestMatch, i) => {
+                            console.log(bestMatch.toString());
                             const box = fullFaceDescriptions[i].detection.box
                             const text = bestMatch.toString()
                             var start = text.lastIndexOf("(");
@@ -154,7 +156,6 @@
                             		break;
                             }
                             $('#username').val(user);
-                            alert(user);
                             $('#form').submit();
                         })
 
